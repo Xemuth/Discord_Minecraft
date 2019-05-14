@@ -10,7 +10,7 @@ void Discord_Minecraft::launchCommande(ValueMap payload){
     String discriminator = payload["d"]["author"]["discriminator"];
 	
 	Cout() << "Event Minecraft" <<"\n";
-	ptrBot->CreateMessage(channel, "Event Minecraft !");
+	ptrBot->CreateMessage(channel, "Event " + name +" !");
 }
 	
 Discord_Minecraft::Discord_Minecraft(Upp::String _name, Upp::String _prefix){
