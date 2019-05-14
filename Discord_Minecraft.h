@@ -11,6 +11,7 @@ class Discord_Minecraft: public DiscordModule{
 	public:
 		
 		Discord_Minecraft(Upp::String _name, Upp::String _prefix);
+		
 		void Event(ValueMap payload);
 	
 	

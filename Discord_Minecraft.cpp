@@ -3,7 +3,14 @@
 using namespace Upp;
 
 void Discord_Minecraft::launchCommande(ValueMap payload){
-	Cout() << "Event déclanché ! #Minecraft" <<"\n";
+	String channel  = payload["d"]["channel_id"];
+    String content  = payload["d"]["content"];
+    String userName = payload["d"]["author"]["username"];
+    String id = payload["d"]["author"]["id"];
+    String discriminator = payload["d"]["author"]["discriminator"];
+	
+	Cout() << "Event Minecraft" <<"\n";
+	ptrBot->CreateMessage(channel, "Event Minecraft !");
 }
 	
 Discord_Minecraft::Discord_Minecraft(Upp::String _name, Upp::String _prefix){
