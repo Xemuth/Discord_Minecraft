@@ -1,0 +1,12 @@
+description "\377BI85,170,0";
+
+uses
+	Core;
+
+file
+	Discord_Minecraft.h,
+	Discord_Minecraft.cpp;
+
+mainconfig
+	"" = "";
+
