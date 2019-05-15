@@ -10,18 +10,18 @@ void Discord_Minecraft::launchCommande(ValueMap payload){
     String discriminator = payload["d"]["author"]["discriminator"];
 	
 	Cout() << "Event Minecraft" <<"\n";
-	ptrBot->CreateMessage(channel, "Event " + name +" !");
+	ptrBot->CreateMessage(channel, "Felix est un camé !!");
 }
 	
 Discord_Minecraft::Discord_Minecraft(Upp::String _name, Upp::String _prefix){
 	name = _name;
 	prefix = _prefix;
 
-	Events.Add([&](ValueMap e){this->launchCommande(e);});
+	EventsMap.Add([&](ValueMap e){this->launchCommande(e);});
 }
 
-void Discord_Minecraft::Event(ValueMap payload){
-	for(auto &e : Events){
+void Discord_Minecraft::Events(ValueMap payload){
+	for(auto &e : EventsMap){
 		e(payload);
 	}
 }

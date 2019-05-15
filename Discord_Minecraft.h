@@ -12,7 +12,7 @@ class Discord_Minecraft: public DiscordModule{
 		
 		Discord_Minecraft(Upp::String _name, Upp::String _prefix);
 		
-		void Event(ValueMap payload);
+		void Events(ValueMap payload);
 	
 	
 };
