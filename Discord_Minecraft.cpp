@@ -17,11 +17,11 @@ Discord_Minecraft::Discord_Minecraft(Upp::String _name, Upp::String _prefix){
 	name = _name;
 	prefix = _prefix;
 
-	EventsMap.Add([&](ValueMap e){this->launchCommande(e);});
+	EventsMapMessageCreated.Add([&](ValueMap e){this->launchCommande(e);});
 }
 
-void Discord_Minecraft::Events(ValueMap payload){
-	for(auto &e : EventsMap){
+void Discord_Minecraft::EventsMessageCreated(ValueMap payload){
+	for(auto &e : EventsMapMessageCreated){
 		e(payload);
 	}
 }
