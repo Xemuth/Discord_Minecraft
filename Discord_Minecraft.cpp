@@ -4,8 +4,11 @@
 using namespace Upp;
 
 void Discord_Minecraft::launchCommande(ValueMap payload){
-	if(	AuthorId.IsEqual("<@131865910121201664>") || AuthorId.IsEqual("<@131915014419382272>")){
-		String command =MessageArgs.ToString();
+	if(	AuthorId.IsEqual("131865910121201664") || AuthorId.IsEqual("131915014419382272")){
+		String command ="";
+		for(String& e : MessageArgs){
+			command += e  ;
+		}
 		myRcon.SendCommand(command);
 		ptrBot->CreateMessage(ChannelLastMessage, "Commande envoyée");
 	}else{
@@ -13,14 +16,11 @@ void Discord_Minecraft::launchCommande(ValueMap payload){
 	}
 }
 	
-Discord_Minecraft::Discord_Minecraft(Upp::String _name, Upp::String _prefix){
+Discord_Minecraft::Discord_Minecraft(Upp::String _name, Upp::String _prefix):myRcon("151.80.10.19",25575, "thunberg","serveur de pierre"){
 	name = _name;
 	prefix = _prefix;
 	
-	myRcon(String _host, int _port, String _password ,String _serviceName,int _TBR);
-
-
-	EventsMapMessageCreated.Add([&](ValueMap e){if(NameOfFunction.IsEqual("test"))this->launchCommande(e);});
+	EventsMapMessageCreated.Add([&](ValueMap e){if(NameOfFunction.IsEqual("command"))this->launchCommande(e);});
 }
 
 void Discord_Minecraft::EventsMessageCreated(ValueMap payload){
