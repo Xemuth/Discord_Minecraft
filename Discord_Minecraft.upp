@@ -1,7 +1,8 @@
 description "\377BI85,170,0";
 
 uses
-	Core;
+	Core,
+	RconManager;
 
 file
 	Discord_Minecraft.h,
