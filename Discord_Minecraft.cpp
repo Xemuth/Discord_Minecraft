@@ -4,27 +4,17 @@
 using namespace Upp;
 
 void Discord_Minecraft::launchCommande(ValueMap payload){
-	if(RconLoaded){
-		if(RconValide){
-			if(RconAuthentified){
-				if(	AuthorId.IsEqual("131865910121201664") || AuthorId.IsEqual("131915014419382272")){
-					String command ="";
-					for(String& e : MessageArgs){
-						command += e  ;
-					}
-					myRcon.SendCommand(command);
-					ptrBot->CreateMessage(ChannelLastMessage, "Commande envoyée");
-				}else{
-					ptrBot->CreateMessage(ChannelLastMessage, "Vous n'avez pas les droits !");
-				}
-			}else{
-				ptrBot->CreateMessage(ChannelLastMessage, "Impossible de s'authentifier sur le serveur. Vérifier le fichier de configuration !");
+	if(testConnexion()){
+		if(	AuthorId.IsEqual("131865910121201664") || AuthorId.IsEqual("131915014419382272")){
+			String command ="";
+			for(String& e : MessageArgs){
+				command += e  ;
 			}
+			myRcon.SendCommand(command);
+			ptrBot->CreateMessage(ChannelLastMessage, "Commande envoyée");
 		}else{
-			ptrBot->CreateMessage(ChannelLastMessage, "Impossible d'établir la connexion avec le serveur. Vérifier le fichier de configuration !");
+			ptrBot->CreateMessage(ChannelLastMessage, "Vous n'avez pas les droits !");
 		}
-	}else{
-		ptrBot->CreateMessage(ChannelLastMessage, "Impossible de faire d'envoyer des commandes. Fichier de configuration invalide !");
 	}
 }
 	
@@ -47,6 +37,26 @@ Discord_Minecraft::Discord_Minecraft(Upp::String _name, Upp::String _prefix,Stri
 		LOG("Discord_Minecraft : Error occured in loading of rconLogs. All Rcon function will be disable");
 	}
 	EventsMapMessageCreated.Add([&](ValueMap e){if(NameOfFunction.IsEqual("command"))this->launchCommande(e);});
+}
+
+bool Discord_Minecraft::testConnexion(){
+	if(RconLoaded){
+		if(RconValide){
+			if(RconAuthentified){
+				return true;
+			}else{
+				ptrBot->CreateMessage(ChannelLastMessage, "Impossible de s'authentifier sur le serveur. Vérifier le fichier de configuration !");
+				return false;
+			}
+		}else{
+			ptrBot->CreateMessage(ChannelLastMessage, "Impossible d'établir la connexion avec le serveur. Vérifier le fichier de configuration !");
+			return false;
+		}
+	}else{
+		ptrBot->CreateMessage(ChannelLastMessage, "Impossible de faire d'envoyer des commandes. Fichier de configuration invalide !");
+		return false;
+	}
+	return true;
 }
 
 void Discord_Minecraft::EventsMessageCreated(ValueMap payload){

@@ -6,19 +6,17 @@
 using namespace Upp;
 class Discord_Minecraft: public DiscordModule{
 	private:
-		EasyConfiguration rconConfig;
-	
 		void launchCommande(ValueMap payload);
+		bool testConnexion();
+		
+		EasyConfiguration rconConfig;
 		RconManager myRcon;
+		
 		bool RconLoaded = false;
 		bool RconValide =false;
 		bool RconAuthentified = false;
 	public:
-		
 		Discord_Minecraft(Upp::String _name, Upp::String _prefix,String RconConfigPath="");
-		
 		void EventsMessageCreated(ValueMap payload);
-	
-	
 };
 #endif
