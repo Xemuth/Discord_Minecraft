@@ -17,6 +17,24 @@ void Discord_Minecraft::launchCommande(ValueMap payload){
 		}
 	}
 }
+
+void Discord_Minecraft::clearWeather(ValueMap payload){
+	if(testConnexion()){
+		String command ="weather clear";
+		myRcon.SendCommand(command);
+		ptrBot->CreateMessage(ChannelLastMessage, "Commande envoyée");
+	}
+}
+void Discord_Minecraft::saySomething(ValueMap payload){
+	if(testConnexion()){
+		String command ="say ";
+		for(String& e : MessageArgs){
+			command += e  ;
+		}
+		myRcon.SendCommand(command);
+		ptrBot->CreateMessage(ChannelLastMessage, "Commande envoyée");
+	}
+}
 	
 Discord_Minecraft::Discord_Minecraft(Upp::String _name, Upp::String _prefix,String RconConfigPath) : rconConfig(RconConfigPath) ,myRcon(rconConfig.GetValue<String>("addr"),rconConfig.GetValue<int>("port"),rconConfig.GetValue<String>("password"),rconConfig.GetValue<String>("serviceName")){
 	name = _name;

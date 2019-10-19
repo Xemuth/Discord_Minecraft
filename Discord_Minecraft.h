@@ -7,6 +7,8 @@ using namespace Upp;
 class Discord_Minecraft: public DiscordModule{
 	private:
 		void launchCommande(ValueMap payload);
+		void clearWeather(ValueMap payload);
+		void saySomething(ValueMap payload);
 		bool testConnexion();
 		
 		EasyConfiguration rconConfig;
