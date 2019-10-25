@@ -18,6 +18,10 @@ class Discord_Minecraft: public DiscordModule{
 		bool RconValide =false;
 		bool RconAuthentified = false;
 	public:
+		
+		void Help(ValueMap payload);
+		virtual String Credit(ValueMap json,bool sendCredit = true);
+		
 		Discord_Minecraft(Upp::String _name,Upp::String _prefix,String RconConfigPath="");
 		void EventsMessageCreated(ValueMap payload);
 };

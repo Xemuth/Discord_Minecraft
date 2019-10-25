@@ -54,7 +54,9 @@ Discord_Minecraft::Discord_Minecraft(Upp::String _name, Upp::String _prefix , St
 	}else{
 		LOG("Discord_Minecraft : Error occured in loading of rconLogs. All Rcon function will be disable");
 	}
-	EventsMapMessageCreated.Add([&](ValueMap e){if(NameOfFunction.IsEqual("command"))this->launchCommande(e);});
+	EventsMapMessageCreated.Add([&](ValueMap e){if(NameOfFunction.IsEqual("command"))launchCommande(e);});
+	EventsMapMessageCreated.Add([&](ValueMap e){if(NameOfFunction.IsEqual("say"))saySomething(e);});
+	EventsMapMessageCreated.Add([&](ValueMap e){if(NameOfFunction.IsEqual("clean"))clearWeather(e);});
 }
 
 bool Discord_Minecraft::testConnexion(){
@@ -75,6 +77,30 @@ bool Discord_Minecraft::testConnexion(){
 		return false;
 	}
 	return true;
+}
+
+String Discord_Minecraft::Credit(ValueMap json,bool sendCredit){
+	String credit =  "----Minecraft Module have been made By Clément Hamon---\n";
+	credit << "-----------https://github.com/Xemuth-----------\n";
+	credit << "Minecraft module is used to do minecraft command over Discord\nLike cleaning the weather or speak to the server\nAll this by using RCON communication\n";
+	credit << "https://github.com/Xemuth/RconManager\nhttps://github.com/Xemuth/Discord_Minecraft";
+	if(sendCredit) BotPtr->CreateMessage(ChannelLastMessage,"```"+credit +"```");
+	return credit;
+}
+
+void Discord_Minecraft::Help(ValueMap payload){
+	Upp::String help;
+	
+	help << "```";
+	help << "Commandes module discord Minecraft No "  << 1  << "/" << 1 << "\n";
+	help << "!mc Command(Command to execute)" <<" -> Execute la command passé en paramètre sur le serveur, vous devez être l'élu.\n\n";
+	help << "!mc Say(message)"<<" -> Ecrit un message global sur le serveur minecraft.\n\n";
+	help << "!mc Clean()"<<" -> Clean la météo du serveur.\n\n";
+	help << "!mc credit()" <<" -> Affiche les crédit du module minecraft.\n\n";
+	help <<"```";
+	
+	
+	BotPtr->CreateMessage(this->ChannelLastMessage, help);
 }
 
 void Discord_Minecraft::EventsMessageCreated(ValueMap payload){
