@@ -11,9 +11,9 @@ void Discord_Minecraft::launchCommande(ValueMap payload){
 				command += e  ;
 			}
 			myRcon.SendCommand(command);
-			ptrBot->CreateMessage(ChannelLastMessage, "Commande envoyée");
+			BotPtr->CreateMessage(ChannelLastMessage, "Commande envoyée");
 		}else{
-			ptrBot->CreateMessage(ChannelLastMessage, "Vous n'avez pas les droits !");
+			BotPtr->CreateMessage(ChannelLastMessage, "Vous n'avez pas les droits !");
 		}
 	}
 }
@@ -22,7 +22,7 @@ void Discord_Minecraft::clearWeather(ValueMap payload){
 	if(testConnexion()){
 		String command ="weather clear";
 		myRcon.SendCommand(command);
-		ptrBot->CreateMessage(ChannelLastMessage, "Commande envoyée");
+		BotPtr->CreateMessage(ChannelLastMessage, "Commande envoyée");
 	}
 }
 void Discord_Minecraft::saySomething(ValueMap payload){
@@ -32,11 +32,11 @@ void Discord_Minecraft::saySomething(ValueMap payload){
 			command += e  ;
 		}
 		myRcon.SendCommand(command);
-		ptrBot->CreateMessage(ChannelLastMessage, "Commande envoyée");
+		BotPtr->CreateMessage(ChannelLastMessage, "Commande envoyée");
 	}
 }
 	
-Discord_Minecraft::Discord_Minecraft(Upp::String _name, Upp::String _prefix,String RconConfigPath) : rconConfig(RconConfigPath) ,myRcon(rconConfig.GetValue<String>("addr"),rconConfig.GetValue<int>("port"),rconConfig.GetValue<String>("password"),rconConfig.GetValue<String>("serviceName")){
+Discord_Minecraft::Discord_Minecraft(Upp::String _name, Upp::String _prefix , String RconConfigPath): rconConfig(RconConfigPath) ,myRcon(rconConfig.GetValue<String>("addr"),rconConfig.GetValue<int>("port"),rconConfig.GetValue<String>("password"),rconConfig.GetValue<String>("serviceName")){
 	name = _name;
 	prefix = _prefix;
 	if(rconConfig.GetValue<String>("addr").GetCount() > 0 && rconConfig.GetValue<int>("port") > 0 && rconConfig.GetValue<String>("password").GetCount() > 0 ){
@@ -63,15 +63,15 @@ bool Discord_Minecraft::testConnexion(){
 			if(RconAuthentified){
 				return true;
 			}else{
-				ptrBot->CreateMessage(ChannelLastMessage, "Impossible de s'authentifier sur le serveur. Vérifier le fichier de configuration !");
+				BotPtr->CreateMessage(ChannelLastMessage, "Impossible de s'authentifier sur le serveur. Vérifier le fichier de configuration !");
 				return false;
 			}
 		}else{
-			ptrBot->CreateMessage(ChannelLastMessage, "Impossible d'établir la connexion avec le serveur. Vérifier le fichier de configuration !");
+			BotPtr->CreateMessage(ChannelLastMessage, "Impossible d'établir la connexion avec le serveur. Vérifier le fichier de configuration !");
 			return false;
 		}
 	}else{
-		ptrBot->CreateMessage(ChannelLastMessage, "Impossible de faire d'envoyer des commandes. Fichier de configuration invalide !");
+		BotPtr->CreateMessage(ChannelLastMessage, "Impossible de faire d'envoyer des commandes. Fichier de configuration invalide !");
 		return false;
 	}
 	return true;
