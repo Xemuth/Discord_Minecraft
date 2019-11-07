@@ -3,6 +3,31 @@
 
 using namespace Upp;
 
+void Discord_Minecraft::PrepareEvent(){
+	EventsMapMessageCreated.Add([&](ValueMap e){if(NameOfFunction.IsEqual("command"))launchCommande(e);});
+	EventsMapMessageCreated.Add([&](ValueMap e){if(NameOfFunction.IsEqual("say"))saySomething(e);});
+	EventsMapMessageCreated.Add([&](ValueMap e){if(NameOfFunction.IsEqual("clean"))clearWeather(e);});
+}
+
+void Discord_Minecraft::PrepareRcon(){
+	if(rconConfig.GetValue<String>("addr").GetCount() > 0 && rconConfig.GetValue<int>("port") > 0 && rconConfig.GetValue<String>("password").GetCount() > 0 ){
+		RconLoaded =true;
+		if(myRcon.TestConnexion()){
+			RconValide=true;
+			if(myRcon.TestLoggin()){
+				RconAuthentified=true;
+			}else{
+				LOG("Discord_Minecraft : Rcon authentification failled. All Rcon function will be disable");
+			}
+		}else{
+			LOG("Discord_Minecraft : Rcon connection can't be established. All Rcon function will be disable");
+		}
+	}else{
+		LOG("Discord_Minecraft : Error occured in loading of rconLogs. All Rcon function will be disable");
+	}
+}
+
+
 void Discord_Minecraft::launchCommande(ValueMap payload){
 	if(testConnexion()){
 		if(	AuthorId.IsEqual("131865910121201664") || AuthorId.IsEqual("131915014419382272")){
@@ -38,26 +63,20 @@ void Discord_Minecraft::saySomething(ValueMap payload){
 	
 Discord_Minecraft::Discord_Minecraft(Upp::String _name, Upp::String _prefix , String RconConfigPath): rconConfig(RconConfigPath) ,myRcon(rconConfig.GetValue<String>("addr"),rconConfig.GetValue<int>("port"),rconConfig.GetValue<String>("password"),rconConfig.GetValue<String>("serviceName")){
 	name = _name;
-	prefix = _prefix;
-	if(rconConfig.GetValue<String>("addr").GetCount() > 0 && rconConfig.GetValue<int>("port") > 0 && rconConfig.GetValue<String>("password").GetCount() > 0 ){
-		RconLoaded =true;
-		if(myRcon.TestConnexion()){
-			RconValide=true;
-			if(myRcon.TestLoggin()){
-				RconAuthentified=true;
-			}else{
-				LOG("Discord_Minecraft : Rcon authentification failled. All Rcon function will be disable");
-			}
-		}else{
-			LOG("Discord_Minecraft : Rcon connection can't be established. All Rcon function will be disable");
-		}
-	}else{
-		LOG("Discord_Minecraft : Error occured in loading of rconLogs. All Rcon function will be disable");
-	}
-	EventsMapMessageCreated.Add([&](ValueMap e){if(NameOfFunction.IsEqual("command"))launchCommande(e);});
-	EventsMapMessageCreated.Add([&](ValueMap e){if(NameOfFunction.IsEqual("say"))saySomething(e);});
-	EventsMapMessageCreated.Add([&](ValueMap e){if(NameOfFunction.IsEqual("clean"))clearWeather(e);});
+	AddPrefix(_prefix);
+	PrepareRcon();
+	PrepareEvent();
 }
+
+
+Discord_Minecraft::Discord_Minecraft(Upp::String _name,Upp::Vector<String> _prefix,String RconConfigPath): rconConfig(RconConfigPath) ,myRcon(rconConfig.GetValue<String>("addr"),rconConfig.GetValue<int>("port"),rconConfig.GetValue<String>("password"),rconConfig.GetValue<String>("serviceName")){
+	name = _name;
+	AddPrefix(_prefix);
+	PrepareRcon();
+	PrepareEvent();
+}
+
+
 
 bool Discord_Minecraft::testConnexion(){
 	if(RconLoaded){

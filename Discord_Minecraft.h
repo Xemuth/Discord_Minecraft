@@ -17,12 +17,19 @@ class Discord_Minecraft: public DiscordModule{
 		bool RconLoaded = false;
 		bool RconValide =false;
 		bool RconAuthentified = false;
+		
+		void PrepareEvent();
+		void PrepareRcon();
+		
 	public:
 		
 		void Help(ValueMap payload);
 		virtual String Credit(ValueMap json,bool sendCredit = true);
 		
+		
+		
 		Discord_Minecraft(Upp::String _name,Upp::String _prefix,String RconConfigPath="");
+		Discord_Minecraft(Upp::String _name,Upp::Vector<String> _prefix,String RconConfigPath=""); // Ici nous passons un vector de prefix si nous avons du multi prefix
 		void EventsMessageCreated(ValueMap payload);
 };
 #endif
