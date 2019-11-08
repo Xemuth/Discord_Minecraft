@@ -6,11 +6,12 @@
 using namespace Upp;
 class Discord_Minecraft: public DiscordModule{
 	private:
-		void LaunchCommande(String commande);
+		
+		void LaunchCommande();
 		void ClearWeather();
-		void SaySomething(String toSay);
+		void SaySomething();
 
-		bool testConnexion();
+	
 		
 		EasyConfiguration rconConfig;
 		RconManager myRcon;
@@ -21,6 +22,7 @@ class Discord_Minecraft: public DiscordModule{
 		
 		void PrepareEvent();
 		void PrepareRcon();
+		bool testConnexion();
 		
 	public:
 		

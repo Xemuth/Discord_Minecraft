@@ -4,8 +4,8 @@
 using namespace Upp;
 
 void Discord_Minecraft::PrepareEvent(){
-	EventsMapMessageCreated.Add([&](ValueMap e){if(NameOfFunction.IsEqual("commande"))launchCommande(MessageArgs.Get("commande").Get<String>());});
-	EventsMapMessageCreated.Add([&](ValueMap e){if(NameOfFunction.IsEqual("say"))saySomething(MessageArgs.Get<String>("commande"));});
+	EventsMapMessageCreated.Add([&](ValueMap e){if(NameOfFunction.IsEqual("commande"))launchCommande();});
+	EventsMapMessageCreated.Add([&](ValueMap e){if(NameOfFunction.IsEqual("say"))saySomething();});
 	EventsMapMessageCreated.Add([&](ValueMap e){if(NameOfFunction.IsEqual("clearweather"))clearWeather();});
 }
 
@@ -31,6 +31,9 @@ void Discord_Minecraft::PrepareRcon(){
 //!mc commande(commande:ExempleCommande)
 void Discord_Minecraft::LaunchCommande(String commande){
 	if(testConnexion()){
+		String commande = "";
+		if(MessageArgs.Find("commande") && MessageArgs.Get("commande").GetTypeName().IsEqual("String"))commande = MessageArgs.Get("commande").Get<String>();
+		
 		if(commande.GetCount() != 0){
 			if(	AuthorId.IsEqual("131865910121201664") || AuthorId.IsEqual("131915014419382272")){
 				myRcon.SendCommand(commande);
@@ -51,15 +54,17 @@ void Discord_Minecraft::ClearWeather(){
 		BotPtr->CreateMessage(ChannelLastMessage, "Commande envoyée");
 	}
 }	
-//!mc say(commande:Hello World !)
-void Discord_Minecraft::SaySomething(String toSay){
+//!mc say(message:Hello World !)
+void Discord_Minecraft::SaySomething(){
 	if(testConnexion()){
+		String toSay = "";
+		if(MessageArgs.Find("message") && MessageArgs.Get("message").GetTypeName().IsEqual("String"))toSay = MessageArgs.Get("message").Get<String>();
 		if(toSay.GetCount() != 0){
 			String command ="say " + toSay;
 			myRcon.SendCommand(command);
 			BotPtr->CreateMessage(ChannelLastMessage, "Commande envoyée");
 		}else{
-			BotPtr->CreateMessage(ChannelLastMessage, "Veuillez mettre une commande !");
+			BotPtr->CreateMessage(ChannelLastMessage, "Veuillez mettre un message !");
 		}
 	}
 }
@@ -115,7 +120,7 @@ void Discord_Minecraft::Help(ValueMap payload){
 	help << "```";
 	help << "Commandes module discord Minecraft No "  << 1  << "/" << 1 << "\n";
 	help << "!mc Commande(Commande:tp Xemuth Salty_Diviper)" <<" -> Execute la command passé en paramètre sur le serveur, vous devez être l'élu. Ses arguments sont 'commande'\n\n";
-	help << "!mc Say(Commande:Hello world from SmartUppBot !)"<<" -> Ecrit un message global sur le serveur minecraft.Ses arguments sont 'commande'\n\n";
+	help << "!mc Say(Message:Hello world from SmartUppBot !)"<<" -> Ecrit un message global sur le serveur minecraft.Ses arguments sont 'commande'\n\n";
 	help << "!mc ClearWeather"<<" -> Clean la météo du serveur. Cette fonction ne possède pas d'arguments\n\n";
 	help << "!mc Credit" <<" -> Affiche les crédit du module minecraft. Cette fonction ne possède pas d'arguments\n\n";
 	help <<"```";
