@@ -64,15 +64,12 @@ void Discord_Minecraft::SaySomething(String toSay){
 	}
 }
 
-
-	
 Discord_Minecraft::Discord_Minecraft(Upp::String _name, Upp::String _prefix , String RconConfigPath): rconConfig(RconConfigPath) ,myRcon(rconConfig.GetValue<String>("addr"),rconConfig.GetValue<int>("port"),rconConfig.GetValue<String>("password"),rconConfig.GetValue<String>("serviceName")){
 	name = _name;
 	AddPrefix(_prefix);
 	PrepareRcon();
 	PrepareEvent();
 }
-
 
 Discord_Minecraft::Discord_Minecraft(Upp::String _name,Upp::Vector<String> _prefix,String RconConfigPath): rconConfig(RconConfigPath) ,myRcon(rconConfig.GetValue<String>("addr"),rconConfig.GetValue<int>("port"),rconConfig.GetValue<String>("password"),rconConfig.GetValue<String>("serviceName")){
 	name = _name;
@@ -120,7 +117,7 @@ void Discord_Minecraft::Help(ValueMap payload){
 	help << "!mc Commande(Commande:tp Xemuth Salty_Diviper)" <<" -> Execute la command passé en paramètre sur le serveur, vous devez être l'élu. Ses arguments sont 'commande'\n\n";
 	help << "!mc Say(Commande:Hello world from SmartUppBot !)"<<" -> Ecrit un message global sur le serveur minecraft.Ses arguments sont 'commande'\n\n";
 	help << "!mc ClearWeather"<<" -> Clean la météo du serveur. Cette fonction ne possède pas d'arguments\n\n";
-	help << "!mc credit" <<" -> Affiche les crédit du module minecraft. Cette fonction ne possède pas d'arguments\n\n";
+	help << "!mc Credit" <<" -> Affiche les crédit du module minecraft. Cette fonction ne possède pas d'arguments\n\n";
 	help <<"```";
 	
 	
