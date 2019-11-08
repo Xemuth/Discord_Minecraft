@@ -4,9 +4,9 @@
 using namespace Upp;
 
 void Discord_Minecraft::PrepareEvent(){
-	EventsMapMessageCreated.Add([&](ValueMap e){if(NameOfFunction.IsEqual("command"))launchCommande(e);});
-	EventsMapMessageCreated.Add([&](ValueMap e){if(NameOfFunction.IsEqual("say"))saySomething(e);});
-	EventsMapMessageCreated.Add([&](ValueMap e){if(NameOfFunction.IsEqual("clean"))clearWeather(e);});
+	EventsMapMessageCreated.Add([&](ValueMap e){if(NameOfFunction.IsEqual("commande"))launchCommande(MessageArgs.Get("commande").Get<String>());});
+	EventsMapMessageCreated.Add([&](ValueMap e){if(NameOfFunction.IsEqual("say"))saySomething(MessageArgs.Get<String>("commande"));});
+	EventsMapMessageCreated.Add([&](ValueMap e){if(NameOfFunction.IsEqual("clearweather"))clearWeather();});
 }
 
 void Discord_Minecraft::PrepareRcon(){
@@ -28,38 +28,43 @@ void Discord_Minecraft::PrepareRcon(){
 }
 
 
-void Discord_Minecraft::launchCommande(ValueMap payload){
+//!mc commande(commande:ExempleCommande)
+void Discord_Minecraft::LaunchCommande(String commande){
 	if(testConnexion()){
-		if(	AuthorId.IsEqual("131865910121201664") || AuthorId.IsEqual("131915014419382272")){
-			String command ="";
-			for(String& e : MessageArgs){
-				command += e  ;
+		if(commande.GetCount() != 0){
+			if(	AuthorId.IsEqual("131865910121201664") || AuthorId.IsEqual("131915014419382272")){
+				myRcon.SendCommand(commande);
+				BotPtr->CreateMessage(ChannelLastMessage, "Commande envoyée");
+			}else{
+				BotPtr->CreateMessage(ChannelLastMessage, "Vous n'avez pas les droits !");
 			}
-			myRcon.SendCommand(command);
-			BotPtr->CreateMessage(ChannelLastMessage, "Commande envoyée");
 		}else{
-			BotPtr->CreateMessage(ChannelLastMessage, "Vous n'avez pas les droits !");
+			BotPtr->CreateMessage(ChannelLastMessage, "Veuillez mettre une commande !");
 		}
 	}
 }
-
-void Discord_Minecraft::clearWeather(ValueMap payload){
+//!mc clearWeather
+void Discord_Minecraft::ClearWeather(){
 	if(testConnexion()){
 		String command ="weather clear";
 		myRcon.SendCommand(command);
 		BotPtr->CreateMessage(ChannelLastMessage, "Commande envoyée");
 	}
-}
-void Discord_Minecraft::saySomething(ValueMap payload){
+}	
+//!mc say(commande:Hello World !)
+void Discord_Minecraft::SaySomething(String toSay){
 	if(testConnexion()){
-		String command ="say ";
-		for(String& e : MessageArgs){
-			command += e  ;
+		if(toSay.GetCount() != 0){
+			String command ="say " + toSay;
+			myRcon.SendCommand(command);
+			BotPtr->CreateMessage(ChannelLastMessage, "Commande envoyée");
+		}else{
+			BotPtr->CreateMessage(ChannelLastMessage, "Veuillez mettre une commande !");
 		}
-		myRcon.SendCommand(command);
-		BotPtr->CreateMessage(ChannelLastMessage, "Commande envoyée");
 	}
 }
+
+
 	
 Discord_Minecraft::Discord_Minecraft(Upp::String _name, Upp::String _prefix , String RconConfigPath): rconConfig(RconConfigPath) ,myRcon(rconConfig.GetValue<String>("addr"),rconConfig.GetValue<int>("port"),rconConfig.GetValue<String>("password"),rconConfig.GetValue<String>("serviceName")){
 	name = _name;
@@ -112,10 +117,10 @@ void Discord_Minecraft::Help(ValueMap payload){
 	
 	help << "```";
 	help << "Commandes module discord Minecraft No "  << 1  << "/" << 1 << "\n";
-	help << "!mc Command(Command to execute)" <<" -> Execute la command passé en paramètre sur le serveur, vous devez être l'élu.\n\n";
-	help << "!mc Say(message)"<<" -> Ecrit un message global sur le serveur minecraft.\n\n";
-	help << "!mc Clean()"<<" -> Clean la météo du serveur.\n\n";
-	help << "!mc credit()" <<" -> Affiche les crédit du module minecraft.\n\n";
+	help << "!mc Commande(Commande:tp Xemuth Salty_Diviper)" <<" -> Execute la command passé en paramètre sur le serveur, vous devez être l'élu. Ses arguments sont 'commande'\n\n";
+	help << "!mc Say(Commande:Hello world from SmartUppBot !)"<<" -> Ecrit un message global sur le serveur minecraft.Ses arguments sont 'commande'\n\n";
+	help << "!mc ClearWeather"<<" -> Clean la météo du serveur. Cette fonction ne possède pas d'arguments\n\n";
+	help << "!mc credit" <<" -> Affiche les crédit du module minecraft. Cette fonction ne possède pas d'arguments\n\n";
 	help <<"```";
 	
 	

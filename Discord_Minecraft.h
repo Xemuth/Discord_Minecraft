@@ -6,9 +6,10 @@
 using namespace Upp;
 class Discord_Minecraft: public DiscordModule{
 	private:
-		void launchCommande(ValueMap payload);
-		void clearWeather(ValueMap payload);
-		void saySomething(ValueMap payload);
+		void LaunchCommande(String commande);
+		void ClearWeather();
+		void SaySomething(String toSay);
+
 		bool testConnexion();
 		
 		EasyConfiguration rconConfig;
