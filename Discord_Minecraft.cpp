@@ -4,9 +4,9 @@
 using namespace Upp;
 
 void Discord_Minecraft::PrepareEvent(){
-	EventsMapMessageCreated.Add([&](ValueMap e){if(NameOfFunction.IsEqual("commande"))launchCommande();});
-	EventsMapMessageCreated.Add([&](ValueMap e){if(NameOfFunction.IsEqual("say"))saySomething();});
-	EventsMapMessageCreated.Add([&](ValueMap e){if(NameOfFunction.IsEqual("clearweather"))clearWeather();});
+	EventsMapMessageCreated.Add([&](ValueMap e){if(NameOfFunction.IsEqual("commande"))LaunchCommande();});
+	EventsMapMessageCreated.Add([&](ValueMap e){if(NameOfFunction.IsEqual("say"))SaySomething();});
+	EventsMapMessageCreated.Add([&](ValueMap e){if(NameOfFunction.IsEqual("clearweather"))ClearWeather();});
 }
 
 void Discord_Minecraft::PrepareRcon(){
@@ -29,7 +29,7 @@ void Discord_Minecraft::PrepareRcon(){
 
 
 //!mc commande(commande:ExempleCommande)
-void Discord_Minecraft::LaunchCommande(String commande){
+void Discord_Minecraft::LaunchCommande(){
 	if(testConnexion()){
 		String commande = "";
 		if(MessageArgs.Find("commande") && MessageArgs.Get("commande").GetTypeName().IsEqual("String"))commande = MessageArgs.Get("commande").Get<String>();
