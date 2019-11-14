@@ -6,12 +6,16 @@
 using namespace Upp;
 class Discord_Minecraft: public DiscordModule{
 	private:
-		
-		void LaunchCommande();
-		void ClearWeather();
-		void SaySomething();
-
+		void PrepareEvent();
+		//Commands
+		void LaunchCommande(ValueMap& payload);
+		void ClearWeather(ValueMap& payload);
+		void SaySomething(ValueMap& payload);
+		void Help(ValueMap& payload);
+		virtual String Credit(ValueMap& json,bool sendCredit = true);
 	
+		//***************
+		
 		
 		EasyConfiguration rconConfig;
 		RconManager myRcon;
@@ -20,14 +24,13 @@ class Discord_Minecraft: public DiscordModule{
 		bool RconValide =false;
 		bool RconAuthentified = false;
 		
-		void PrepareEvent();
+		
 		void PrepareRcon();
 		bool testConnexion();
 		
 	public:
 		
-		void Help(ValueMap payload);
-		virtual String Credit(ValueMap json,bool sendCredit = true);
+		
 		
 		
 		

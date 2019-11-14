@@ -4,9 +4,9 @@
 using namespace Upp;
 
 void Discord_Minecraft::PrepareEvent(){
-	EventsMapMessageCreated.Add([&](ValueMap e){if(NameOfFunction.IsEqual("commande"))LaunchCommande();});
-	EventsMapMessageCreated.Add([&](ValueMap e){if(NameOfFunction.IsEqual("say"))SaySomething();});
-	EventsMapMessageCreated.Add([&](ValueMap e){if(NameOfFunction.IsEqual("clearweather"))ClearWeather();});
+	EventsMapMessageCreated.Add([&](ValueMap& e){if(NameOfFunction.IsEqual("commande"))LaunchCommande(e);});
+	EventsMapMessageCreated.Add([&](ValueMap& e){if(NameOfFunction.IsEqual("say"))SaySomething(e);});
+	EventsMapMessageCreated.Add([&](ValueMap& e){if(NameOfFunction.IsEqual("clearweather"))ClearWeather(e);});
 }
 
 void Discord_Minecraft::PrepareRcon(){
@@ -29,7 +29,7 @@ void Discord_Minecraft::PrepareRcon(){
 
 
 //!mc commande(commande:ExempleCommande)
-void Discord_Minecraft::LaunchCommande(){
+void Discord_Minecraft::LaunchCommande(ValueMap& payload){
 	if(testConnexion()){
 		String commande = "";
 		if(MessageArgs.Find("commande") && MessageArgs.Get("commande").GetTypeName().IsEqual("String"))commande = MessageArgs.Get("commande").Get<String>();
@@ -47,7 +47,7 @@ void Discord_Minecraft::LaunchCommande(){
 	}
 }
 //!mc clearWeather
-void Discord_Minecraft::ClearWeather(){
+void Discord_Minecraft::ClearWeather(ValueMap& payload){
 	if(testConnexion()){
 		String command ="weather clear";
 		myRcon.SendCommand(command);
@@ -55,7 +55,7 @@ void Discord_Minecraft::ClearWeather(){
 	}
 }	
 //!mc say(message:Hello World !)
-void Discord_Minecraft::SaySomething(){
+void Discord_Minecraft::SaySomething(ValueMap& payload){
 	if(testConnexion()){
 		String toSay = "";
 		if(MessageArgs.Find("message") && MessageArgs.Get("message").GetTypeName().IsEqual("String"))toSay = MessageArgs.Get("message").Get<String>();
@@ -105,7 +105,7 @@ bool Discord_Minecraft::testConnexion(){
 	return true;
 }
 
-String Discord_Minecraft::Credit(ValueMap json,bool sendCredit){
+String Discord_Minecraft::Credit(ValueMap& json,bool sendCredit){
 	String credit =  "----Minecraft Module have been made By Clément Hamon---\n";
 	credit << "-----------https://github.com/Xemuth-----------\n";
 	credit << "Minecraft module is used to do minecraft command over Discord\nLike cleaning the weather or speak to the server\nAll this by using RCON communication\n";
@@ -114,7 +114,7 @@ String Discord_Minecraft::Credit(ValueMap json,bool sendCredit){
 	return credit;
 }
 
-void Discord_Minecraft::Help(ValueMap payload){
+void Discord_Minecraft::Help(ValueMap& payload){
 	Upp::String help;
 	
 	help << "```";
